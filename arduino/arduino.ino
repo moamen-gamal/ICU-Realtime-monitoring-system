@@ -14,7 +14,7 @@ void loop() {
   collectSensorData();
   recvFromEsp();
   Serial.println(receivedChars);
-  delay(500);
+  delay(1000);
 
 }
 void collectSensorData() {

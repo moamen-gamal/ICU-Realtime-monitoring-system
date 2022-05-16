@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-patients_sensors =[0,1]
+patients_sensors =[0]
 app = Flask(__name__)
 
 @app.route('/main')
@@ -10,10 +10,11 @@ def hello():
 @app.route('/sendData',methods= ['GET','POST'])
 def send2firebase():
     content = request.json
-    int(content["ID"])
     print (content)
-    return "1"
+    if(int(content["ID"]) > len(patients_sensors)):
+        patients_sensors.append(0)
+    return str(patients_sensors[int(content["ID"])])
 
 
 if __name__ == '__main__':
-    app.run('172.28.128.189',port=5000,threaded=True)
+    app.run('192.168.1.2',port=5000,threaded=True)
