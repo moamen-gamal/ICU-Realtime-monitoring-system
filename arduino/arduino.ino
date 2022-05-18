@@ -14,13 +14,15 @@ void setup() {
 
 void loop() {
   digitalWrite(LED_BUILTIN, LOW);
-  delay(1000);
-  collectSensorData();
+  
   recvFromEsp();
-  //Serial.println(receivedChars);
+ 
+  collectSensorData();
+
+  Serial.println(receivedChars);
   if(receivedChars== '1')
     digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
+  delay(100);
 
 }
 void collectSensorData() {
@@ -29,7 +31,7 @@ void collectSensorData() {
   // create an object
   JsonObject object = doc.to<JsonObject>();
   object["ID"] = 0;
-  int randint = random(0,20);
+  int randint = 10;
   if (senosr1Active) {
     object["TEMP"] = randint;
   }

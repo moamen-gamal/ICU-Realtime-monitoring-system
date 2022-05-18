@@ -16,13 +16,15 @@ def send2firebase():
     global idx
     content = request.json
     print (content)
-    if(int(content["ID"]) > len(patients_sensors)):
+    if(content["ID"] > len(patients_sensors)):
         diff = int(content["ID"]) - len(patients_sensors)
         while (diff >=0):
             patients_sensors.append(0)
             diff = diff -1
-    addReadings1(int(content["ID"]),idx,int(content["TEMP"]))
-    addReadings2(int(content["ID"]),idx,int(content["LDR"]))
+    addReadings1(int(content["ID"]),idx,content["TEMP"])
+    addReadings2(int(content["ID"]),idx,content["LDR"])
+    addReadings1(1,idx,content["TEMP"]+5)
+    addReadings2(1,idx,content["TEMP"]+5)
     idx = idx+1
     return str(patients_sensors[int(content["ID"])])
 
@@ -38,4 +40,4 @@ def state():
     patients_sensors[int(id)] = int(request.args.get("val"))
     return"ok"
 if __name__ == '__main__':
-    app.run('0.0.0.0',port=5000,threaded=True)
+    app.run('192.168.43.251',port=5000,threaded=True)

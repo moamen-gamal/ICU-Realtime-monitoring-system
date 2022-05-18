@@ -1,8 +1,8 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#define NAME "STUDBME2"
-#define PASS "BME2Stud"
+#define NAME "omar"
+#define PASS "omar@0000"
 const byte numChars = 39;
 char receivedChars[numChars];   // an array to store the received data
 
@@ -13,7 +13,7 @@ String payload;
 int httpCode;
 HTTPClient http;  //Declare an object of class HTTPClient
 
-String URL ="http://172.28.130.86:5000/sendData";
+String URL ="http://192.168.43.251:5000/sendData";
 
 
 void setup() {
@@ -29,10 +29,10 @@ void setup() {
 }
 
 void loop() {
- delay(1000);
+ //delay(1000);
  recvFromArduino();
- delay(1000);
- //Serial.println(receivedChars);
+ delay(100);
+ Serial.println(receivedChars);
  WiFiClient wifi;
  http.begin(wifi,URL); //Specify request destination
  http.addHeader("Content-Type", "application/json");
@@ -50,7 +50,7 @@ void recvFromArduino() {
   char endMarker = '\n';
   char rc;
 
-  while (Serial.available() > 0 && newData == false) {
+  while (Serial.available() > 0 ) {
     rc = Serial.read();
     if (rc != endMarker) {
       receivedChars[ndx] = rc;
