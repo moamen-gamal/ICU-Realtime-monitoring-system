@@ -1,8 +1,8 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#define NAME "Zestar"
-#define PASS "Zestar@1234    "
+#define NAME "STUDBME2"
+#define PASS "BME2Stud"
 const byte numChars = 39;
 char receivedChars[numChars];   // an array to store the received data
 
@@ -13,7 +13,7 @@ String payload;
 int httpCode;
 HTTPClient http;  //Declare an object of class HTTPClient
 
-String URL ="http://192.168.1.2:5000/sendData";
+String URL ="http://172.28.130.86:5000/sendData";
 
 
 void setup() {
@@ -24,29 +24,25 @@ void setup() {
     delay(100);
   }
   //Serial.println("Connected");
-  
+  pinMode(BUILTIN_LED, OUTPUT);  
+  digitalWrite(BUILTIN_LED, HIGH);
 }
 
 void loop() {
-  
+ delay(1000);
  recvFromArduino();
+ delay(1000);
  //Serial.println(receivedChars);
  WiFiClient wifi;
- 
  http.begin(wifi,URL); //Specify request destination
  http.addHeader("Content-Type", "application/json");
  int httpResponseCode = http.POST(receivedChars);
- if(httpResponseCode >0)
-  pay = http.getString();
- else
-  
+ pay = http.getString();
  http.end();   //Close connection
  if(pay == "1")
  Serial.println("1");
  else
  Serial.println("0");
- 
- delay(1000);
 }
 
 void recvFromArduino() {
@@ -56,7 +52,6 @@ void recvFromArduino() {
 
   while (Serial.available() > 0 && newData == false) {
     rc = Serial.read();
-  
     if (rc != endMarker) {
       receivedChars[ndx] = rc;
       ndx++;

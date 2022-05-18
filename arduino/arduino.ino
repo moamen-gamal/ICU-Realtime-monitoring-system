@@ -1,5 +1,5 @@
 #include <ArduinoJson.h>
-const byte numChars = 39;
+const byte numChars = 3;
 char receivedChars[numChars];  // an array to store the received data
 boolean newData = false;
 String sensorValues ;
@@ -8,12 +8,18 @@ bool senosr1Active = true ;
 bool senosr2Active = true ;
 void setup() {
   Serial.begin(9600);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void loop() {
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(1000);
   collectSensorData();
   recvFromEsp();
-  Serial.println(receivedChars);
+  //Serial.println(receivedChars);
+  if(receivedChars== '1')
+    digitalWrite(LED_BUILTIN, HIGH);
   delay(1000);
 
 }
@@ -23,11 +29,12 @@ void collectSensorData() {
   // create an object
   JsonObject object = doc.to<JsonObject>();
   object["ID"] = 0;
+  int randint = random(0,20);
   if (senosr1Active) {
-    object["TEMP"] = 20;
+    object["TEMP"] = randint;
   }
   if (senosr2Active) {
-    object["LDR"] = 20;
+    object["LDR"] = randint;
   }
   sensorValues = " " ;
   serializeJson(doc, sensorValues);
@@ -40,7 +47,6 @@ void recvFromEsp() {
 
   while (Serial.available() > 0 && newData == false) {
     rc = Serial.read();
-  
     if (rc != endMarker) {
       receivedChars[ndx] = rc;
       ndx++;
